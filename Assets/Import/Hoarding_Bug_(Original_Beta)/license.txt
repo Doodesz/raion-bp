@@ -1,0 +1,11 @@
+Model Information:
+* title:	Hoarding Bug (Original/Beta)
+* source:	https://sketchfab.com/3d-models/hoarding-bug-originalbeta-d0cc364adf9744c892186fdd2e9be3c2
+* author:	Lethal Company (https://sketchfab.com/LethalCompany)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Hoarding Bug (Original/Beta)" (https://sketchfab.com/3d-models/hoarding-bug-originalbeta-d0cc364adf9744c892186fdd2e9be3c2) by Lethal Company (https://sketchfab.com/LethalCompany) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

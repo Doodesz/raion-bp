@@ -23,7 +23,7 @@ public class CameraBehaviour : MonoBehaviour
 
     }
 
-    // Agar pergerakan kamera halus, pakai LateUpdate()
+    // For smoother camera movements and fix camera stuttering every frame
     private void LateUpdate()
     {
         transform.position = new Vector3(camCenterPoint.transform.position.x, 

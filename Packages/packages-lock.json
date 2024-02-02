@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.spoiledcat.git": {
-      "version": "1.0.18",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://registry.spoiledcat.com"
-    },
     "com.unity.collab-proxy": {
       "version": "2.1.0",
       "depth": 0,

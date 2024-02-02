@@ -10,16 +10,12 @@ public class SliderBehaviour : MonoBehaviour
 
     private CarBehaviour carBehaviour;
     private Slider slider;
-    private PlayerController playerController;
-    private EventManager eventManager;
 
     // Start is called before the first frame update
     void Start()
     {
         carBehaviour = car.GetComponent<CarBehaviour>();
         slider = GetComponent<Slider>();
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
-        eventManager = GameObject.Find("Event Manager").GetComponent<EventManager>();
     }
 
     // Update is called once per frame

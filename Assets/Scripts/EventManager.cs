@@ -45,17 +45,17 @@ public class EventManager : MonoBehaviour
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         carPromptText = carRepairPrompt.GetComponent<TMP_Text>();
         carBehaviour = car.GetComponent<CarBehaviour>();
-        Physics.gravity *= 3f;
         videoPlayerBehaviour = videoPlayer.GetComponent<VideoPlayerBehaviour>();
         audioSource = GetComponent<AudioSource>();
         currentScene = SceneManager.GetActiveScene().name;
         videoRenderer.GetComponent<RawImage>().enabled = false;
+        Physics.gravity *= 3f; // For GameObjects to be heavier and harder for car to flip (possible anyways)
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player != null)
+        if (player != null) // Optimization
         {
             // Show prompts for interactables (car)
             if(Vector3.Distance(player.transform.position, car.transform.position) < promptDistance && !playerController.enterCar)
@@ -69,10 +69,10 @@ public class EventManager : MonoBehaviour
                 carPromptText.enabled = false;
             }
 
-            // Monitors if car fixed
+            // Monitors if car is fixed
             if(repairedParts >= 3)
             {
-                carBehaviour.CarRepaired();
+                carBehaviour.CarRepaired(); // To call fixed sfx
                 carRepaired = true;
             }
 
@@ -87,12 +87,14 @@ public class EventManager : MonoBehaviour
         if (pauseScreen.activeSelf == true)
         volumeSliderBehaviour = GameObject.Find("Volume Slider").GetComponent<VolumeSliderBehaviour>();
 
+        // Otherwise stays the same. Also an optimization/bug fix for when pause screen is disabled
         if (volumeSliderBehaviour != null)
         {
             gameVolume = volumeSliderBehaviour.volume;
         }
     }
 
+    // Texts are put here to avoid hiccups for a split-second before changing text
     private void LateUpdate()
     {
         if (player != null)
@@ -116,6 +118,7 @@ public class EventManager : MonoBehaviour
         }
     }
 
+    // Shows a video of ryan gosling upon winning
     public void Escaped()
     {
         videoPlayerBehaviour.PlayWinClip();
@@ -125,6 +128,7 @@ public class EventManager : MonoBehaviour
         gameEnded = true;
     }
 
+    // Shows a cringe cat upon dying
     private void Died()
     {
         videoPlayerBehaviour.PlayDeadClip();
@@ -134,6 +138,7 @@ public class EventManager : MonoBehaviour
         gameEnded = true;
     }
 
+    // Increases repair tool count and resets fixing bar
     public void SubmitRepairTool()
     {
         repairedParts++;

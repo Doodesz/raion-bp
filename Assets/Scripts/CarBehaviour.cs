@@ -32,8 +32,8 @@ public class CarBehaviour : MonoBehaviour
         eventManager = GameObject.Find("Event Manager").GetComponent<EventManager>();
         player = GameObject.Find("Player");
         playerController = player.GetComponent<PlayerController>();
-        initMoveSpeed = moveSpeed;
         audioSource = GetComponent<AudioSource>();
+        initMoveSpeed = moveSpeed;
     }
 
     // Update is called once per frame
@@ -44,6 +44,7 @@ public class CarBehaviour : MonoBehaviour
 
         enterCar = playerController.enterCar;
 
+        // Adds 1 repair tool when bar full
         if (repairProgress >= repairDuration)
         {
             eventManager.SubmitRepairTool();
@@ -57,18 +58,17 @@ public class CarBehaviour : MonoBehaviour
         if (enterCar)
         {
             // Movement controls
-
+            // Decrease movespeed to 30% when on reverse
             if (verticalAxis < 0 && !crashed)
             {
                 horizontalAxis *= -1;
                 moveSpeed = initMoveSpeed * 0.3f;
             }
-
             else if (!crashed)
             {
                 moveSpeed = initMoveSpeed;
             }
-
+            
             float turningAngle = Mathf.Abs(verticalAxis) * horizontalAxis * Time.deltaTime * moveSpeed * steerPower;
 
             // Turn right/left
@@ -77,16 +77,16 @@ public class CarBehaviour : MonoBehaviour
             transform.Translate(Vector3.forward * verticalAxis * moveSpeed * Time.smoothDeltaTime, Space.Self);
         }
 
-        Quaternion carRot = transform.localRotation;
-
-        if (transform.localRotation.z >= 40f)
+        // Should've been a bug fix so car is unable to be flipped upside down but not work:/
+/*        Vector3 carRot = transform.eulerAngles;
+        if (carRot.z > 40f)
         {
-            transform.localRotation = Quaternion.Euler(carRot.x, carRot.y, 40f);
+            transform.eulerAngles = new Vector3(carRot.x, carRot.y, 40f);
         }
-        if (transform.localRotation.z <= -40f)
+        if (carRot.z < -40f)
         {
-            transform.localRotation = Quaternion.Euler(carRot.x, carRot.y, -40f);
-        }
+            transform.eulerAngles = new Vector3(carRot.x, carRot.y, -40f);
+        }*/
 
         audioSource.volume = GetComponent<VolumeController>().initVolume * verticalAxis;
         if (audioSource.volume < 0.1f) audioSource.volume = 0.1f;
@@ -96,6 +96,7 @@ public class CarBehaviour : MonoBehaviour
     {
         float verticalAxis = Input.GetAxis("Vertical");
 
+        // Bug fix to slow down car when hitting houses, otherwise car could clip inside
         if (collision.gameObject.CompareTag("Terrain"))
         {
             moveSpeed = 1f;
@@ -107,12 +108,8 @@ public class CarBehaviour : MonoBehaviour
         {
             eventManager.Escaped();
         }
-
-        if (collision.gameObject.CompareTag("Enemy") && playerController.enterCar && verticalAxis >= (1/2)*moveSpeed)
-        {
-            Instantiate(hitAudioObject, transform.position, Quaternion.identity);
-        }
     }
+
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Terrain"))
@@ -124,7 +121,7 @@ public class CarBehaviour : MonoBehaviour
 
     public void CarRepaired()
     {
-        if (!eventManager.carRepaired)
+        if (!eventManager.carRepaired) // Bug fix for not getting called every frame
         Instantiate(repairedSFXObject);
 
         Destroy(smokeParticle);
@@ -137,19 +134,13 @@ public class CarBehaviour : MonoBehaviour
         if (carBgmObject.isPlaying)
         {
             carBgmObject.Pause();
-            ToggleEngineSound();
+            audioSource.Pause();
         }
 
         else
         {
             carBgmObject.Play();
-            ToggleEngineSound();
+            audioSource.Play();
         }
-    }
-
-    private void ToggleEngineSound()
-    {
-        if (audioSource.isPlaying) audioSource.Pause();
-        else audioSource.Play();
     }
 }

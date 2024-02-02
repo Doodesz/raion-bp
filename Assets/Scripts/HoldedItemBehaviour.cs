@@ -23,5 +23,7 @@ public class HoldedItemBehaviour : MonoBehaviour
             GetComponent<Renderer>().enabled = true;
         }
         else GetComponent<Renderer>().enabled = false;
+
+        // Used enum so I can easily add more interactables without adding more scripts for the shown held object
     }
 }

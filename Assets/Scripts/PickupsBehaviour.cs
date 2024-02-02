@@ -11,16 +11,10 @@ public class PickupsBehaviour : MonoBehaviour
     public PickupType thisPickupType;
     public GameObject interactablePromptObject;
 
-    private GameObject player;
-    private EventManager eventManager;
-    private AudioSource audioSource;
-
     // Start is called before the first frame update
     void Start()
     {
-        eventManager = GameObject.Find("Event Manager").GetComponent<EventManager>();
-        player = GameObject.Find("Player");
-        audioSource = audioSourceObject.GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame

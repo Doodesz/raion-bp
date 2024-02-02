@@ -50,28 +50,33 @@ public class EnemyBehaviour : MonoBehaviour
         speed = initSpeed;
         collider.enabled = false;
         rb.useGravity = false;
+
+        // Rise from ground anim init
         transform.position = new Vector3(transform.position.x, -spawnOffset, transform.position.z);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player != null) // optimisasi MissingReferenceException setelah player destroyed
+        if (player != null) // MissingReferenceException when player destroyed optimization
         {
-            // Saat masih spawning
+            // When spawning, appears from ground gradually
             if (!spawned)
             {
                 transform.Translate(Vector3.up * spawnOffset * Time.deltaTime);
             }
 
-            // Sesudah spawn
+            // Post-spawn
             else if (!dead && !stoleRepairTool)
             {
+                // Looks at player when not stunned
                 if (!stunned)
                 {
                     playerPos = new Vector3(player.transform.position.x, 1f, player.transform.position.z);
                     transform.LookAt(playerPos);
                 }
+
+                // Freeze rotation when stunned
                 else if (stunned)
                 {
                     transform.rotation = stunFacing;
@@ -80,29 +85,32 @@ public class EnemyBehaviour : MonoBehaviour
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
 
-            // If dead
+            // Despawns in a set time after dying
             else if (dead)
             {
                 Invoke("Despawn", 3f);
             }
 
+            // Changes direction after stealing a repair tool
             else if (stoleRepairTool)
             {
                 if (!isRunning)
                 {
-                    transform.localEulerAngles = GetRandomRotation(0);
+                    transform.eulerAngles = GetRandomRotation(0);
                     isRunning = true;
                 }
-                else transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+                else transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
                 transform.Translate(Vector3.forward * speed * 2 * Time.deltaTime);
             }
 
-            // Optimisasi
+            // Optimization to unrender when out of camera
             float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
             if (distanceToPlayer < eventManager.renderDistance) GetComponent<Renderer>().enabled = true;
             else GetComponent<Renderer>().enabled = false;
         }
-        else GetComponent<Renderer>().enabled = false;
+
+        else GetComponent<Renderer>().enabled = false; // Optimization/bug fix when player died (destroyed)
+                                                       // no gameobject reference
 
 
         // Destroy when out of Bounds
@@ -119,16 +127,18 @@ public class EnemyBehaviour : MonoBehaviour
         {
             LowHPColor();
         }
+
         if (hp <= 0)
         {
             dead = true;
             animator.SetBool("isDead", true);
-            rb.useGravity = true;
+            rb.useGravity = true; // For yippees to fall down
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Knocks away and stuns enemy when hitting a bullet. However, if died already, ignores bullet
         if (collision.gameObject.CompareTag("Bullet") && !dead)
         {
             Vector3 bulletPos = collision.gameObject.transform.position;
@@ -142,6 +152,7 @@ public class EnemyBehaviour : MonoBehaviour
             Instantiate(hitAudioObject, transform.position, Quaternion.identity);
         }
 
+        // If thisEnemyType is Yippee, steals repair tool
         if (collision.gameObject.CompareTag("Player") && thisEnemyType == EnemyType.Yippee && !dead)
         {
             StealRepairTool();
@@ -150,17 +161,21 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Car") && playerController.enterCar)
+        float carSpeed = Input.GetAxis("Vertical");
+        
+        // Kills instantly and knocks enemy up when getting hit by car at high speed
+        if (collision.gameObject.CompareTag("Car") && playerController.enterCar && carSpeed > 0.5f)
         {
-            float carSpeed = Input.GetAxis("Vertical");
             if (carSpeed > 0.5f)
             {
                 transform.Translate(new Vector3(0, 20f, 0) * Time.deltaTime);
                 hp = 0;
                 dead = true;
+                Instantiate(hitAudioObject, transform.position, Quaternion.identity);
             }
         }
 
+        // Fix bug Yippees going below ground after stealing
         if (stoleRepairTool)
         {
             if (!collision.gameObject.CompareTag("Ground"))
@@ -168,6 +183,7 @@ public class EnemyBehaviour : MonoBehaviour
         }
     }
 
+    // Spawn timer before chasing player
     IEnumerator SpawnTimer()
     {
         yield return new WaitForSecondsRealtime(2);
@@ -176,6 +192,7 @@ public class EnemyBehaviour : MonoBehaviour
         rb.useGravity = true;
     }
 
+    // When being hit by bullet, stuns them for brief moment, giving player some breath
     IEnumerator Stun(float duration)
     {
         stunned = true;
@@ -196,7 +213,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void Hit()
     {
-        if (thisEnemyType == EnemyType.Normal)
+        // Normal enemy-specific because there's no hit trigger for yippees and im lazy and forgor to add
+        if (thisEnemyType == EnemyType.Normal) 
         {
             animator.SetTrigger("hit");
         }
@@ -204,13 +222,14 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void LowHPColor()
     {
+        // Also // Normal enemy-specific because there's no hit trigger for yippees and im lazy and forgor to add
         if (thisEnemyType == EnemyType.Normal)
         {
             animator.SetBool("low", true);
         }
     }
 
-    // Fungsi buriq ga jelas tapi work hehe rraaaaaaaaahhh
+    // Fungsi nyuri repair tool buriq ga jelas tapi work hehe rraaaaaaaaahhh
     private void StealRepairTool()
     {
         // Urutan eksekusi penting disini

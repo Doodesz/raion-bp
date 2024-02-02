@@ -52,6 +52,7 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnEnemy()
     {
+        // Optimization limits enemies shown, if enemies in scene is already 50, don't spawn
         int enemyAmount = GameObject.FindGameObjectsWithTag("Enemy").Length;
         
         if(enemyAmount < 50)
@@ -86,10 +87,10 @@ public class SpawnManager : MonoBehaviour
         float randomHorizontalBoundary = Random.Range(-horizontalBound, horizontalBound);
         float randomVerticalBoundary = Random.Range(-verticalBound, verticalBound);
 
-        // Avoids spawning on player spawn
+        // Fix to avoid spawning on player spawn
         Vector3 spawnPos = new Vector3(randomHorizontalBoundary, height, randomVerticalBoundary);
-        if (randomHorizontalBoundary < 3 && randomHorizontalBoundary > -6 && 
-            randomVerticalBoundary > -4 && randomVerticalBoundary < 4f)
+        if (randomHorizontalBoundary < 3 && randomHorizontalBoundary > -8 && 
+            randomVerticalBoundary > -6 && randomVerticalBoundary < 5f)
         {
             spawnPos = GetNewSpawnPos(height);
         }
@@ -116,7 +117,7 @@ public class SpawnManager : MonoBehaviour
     {
         float random = Random.Range(0f, 100f);
 
-        if (random <= 30f)
+        if (random <= 30f) // Percentage to spawn yippees
         {
             return 1; // Spawns yippees
         }

@@ -5,13 +5,11 @@ using UnityEngine.Video;
 
 public class VideoPlayerBehaviour : MonoBehaviour
 {
-    private Renderer _renderer;
     private VideoPlayer videoPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
-        _renderer = GetComponent<Renderer>();
         videoPlayer = GetComponent<VideoPlayer>();
     }
 

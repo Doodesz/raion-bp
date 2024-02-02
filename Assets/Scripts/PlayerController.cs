@@ -74,6 +74,8 @@ public class PlayerController : MonoBehaviour
                 // Move vertically
                 transform.Translate(Vector3.forward * moveSpeed * verticalAxis * Time.deltaTime, Space.World);
             }
+
+            // Teleport player under car when entered
             else if (enterCar)
             {
                 transform.position = car.transform.position + new Vector3(0f, -5f, 0f);
@@ -140,7 +142,7 @@ public class PlayerController : MonoBehaviour
                 carBehaviour.ToggleCarSounds();
                 eventManager.GetComponent<AudioSource>().Pause();
             }
-
+            // If already entered, then exit car
             else if (Input.GetKeyDown(KeyCode.E) && enterCar)
             {
                 enterCar = false;
@@ -154,14 +156,14 @@ public class PlayerController : MonoBehaviour
             if (interactCD < 0.3f) interactCD += Time.deltaTime;
             else canInteract = false;
 
-            // Optimization
+            // Fix player go under ground when exiting car
             if (transform.position.y < 0f && !enterCar)
             {
                 transform.position = new Vector3(transform.position.x, 0, transform.position.z);
             }
 
             // When died
-            // kasih transform tergeletak
+            // kasih transform tergeletak (blom)
             if (hp <= 0)
             {
                 isDead = true;
@@ -185,11 +187,9 @@ public class PlayerController : MonoBehaviour
         // Fix bug aim kebawah. cause: sekitar CameraCenterPoint.cs
         Quaternion rotation = transform.rotation;
         rotation.x = 0f;        
-        
-
     }
 
-    // Nembak
+    // Shoot
     private void Shoot()
     {
         if (!enterCar)
@@ -202,12 +202,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        // Ketika kena musuh
         if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemyBehaviour enemyBehaviour = collision.gameObject.GetComponent<EnemyBehaviour>();
             bool enemyDead = enemyBehaviour.dead;
-
+            
+            // Receive dmg after every 2s staying collided with enemy
             if (!enemyDead && !enemyBehaviour.stoleRepairTool) ReceiveDMG();
         }
     }
@@ -220,13 +220,15 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator ReceiveDMGTimer()
     {
-        isReceivingDMG = true;
+        isReceivingDMG = true; // Checks if coroutine already running 
         hp--;
         animator.SetTrigger("hit");
         yield return new WaitForSeconds(2f);
         isReceivingDMG = false;
     }
 
+    // Optimization / bug fix by giving a brief timer before allowing another interact.
+    // Otherwise can conflict being inside/outside of car at the same time
     public void AllowInteract()
     {
         if (interactCD >= 0.3f)

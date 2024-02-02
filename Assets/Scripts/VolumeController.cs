@@ -6,7 +6,6 @@ public class VolumeController : MonoBehaviour
 {
     public float initVolume;
 
-    private VolumeSliderBehaviour volumeSliderBehaviour;
     private AudioSource audioSource;
     private EventManager eventManager;
 
@@ -14,13 +13,15 @@ public class VolumeController : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        initVolume = audioSource.volume;
+        initVolume = audioSource.volume; // Gets GameObject original volume
         eventManager = GameObject.Find("Event Manager").GetComponent<EventManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // When attached to audio source GameObjects, makes their volume the same on all other audio source objects.
+        // At least within scene...
         audioSource.volume = initVolume * eventManager.gameVolume;
     }
 }

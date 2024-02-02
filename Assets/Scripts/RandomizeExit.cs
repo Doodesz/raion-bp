@@ -13,6 +13,6 @@ public class RandomizeExit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Would've add more exit sides but no time
     }
 }

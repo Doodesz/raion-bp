@@ -27,10 +27,10 @@ public class TerrainBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (thisTerrainType == TerrainType.Tree)
+/*        if (thisTerrainType == TerrainType.Tree)
         {
             if (isBroken) FallDown();
-        }
+        }*/
         
         if (player != null)
         {
@@ -44,12 +44,15 @@ public class TerrainBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Broke trees down when hit by car
         if (collision.gameObject.CompareTag("Car") && thisTerrainType == TerrainType.Tree)
         {
             isBroken = true;
+            FallDown();
             if (!playingSound) StartCoroutine(PlayTreeHitSound());
         }
 
+        // Fix to avoid spawning on houses/repairs that renders clipped-inside-objects inaccessible
         if (collision.gameObject.CompareTag("Terrain") || collision.gameObject.CompareTag("Repair Tool"))
         {
             Vector3 newSpawnPos = GameObject.Find("Spawner").GetComponent<SpawnManager>().GetNewSpawnPos(1.5f);
@@ -59,6 +62,7 @@ public class TerrainBehaviour : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
+        // Flies trees away on car hit
         if (collision.gameObject.CompareTag("Car") && thisTerrainType == TerrainType.Tree)
         {
             transform.Translate(Vector3.up * 3f * Time.smoothDeltaTime);
@@ -76,7 +80,7 @@ public class TerrainBehaviour : MonoBehaviour
     {
         Instantiate(treeHitAudioSourceObject);
         playingSound = true;
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(1f);
         playingSound = false;
     }
 }

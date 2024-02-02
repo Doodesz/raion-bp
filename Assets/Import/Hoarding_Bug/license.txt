@@ -1,0 +1,11 @@
+Model Information:
+* title:	Hoarding Bug
+* source:	https://sketchfab.com/3d-models/hoarding-bug-ec4543edf74c4d329653c97a7acb0f9b
+* author:	STOIIC (https://sketchfab.com/Matrydom)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Hoarding Bug" (https://sketchfab.com/3d-models/hoarding-bug-ec4543edf74c4d329653c97a7acb0f9b) by STOIIC (https://sketchfab.com/Matrydom) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

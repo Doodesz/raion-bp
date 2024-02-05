@@ -3,7 +3,10 @@ guid: ded8da736dfeaa84caf5495f259c8a82
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - yippeeAudioObject: {fileID: 6788356082596691231, guid: 832bc09f8f3c8d04dabb43b10520b31c, type: 3}
+  - hitAudioObject: {fileID: 4871815473579743036, guid: a30944f193998b7499e1bae8ce0e8d60, type: 3}
+  - stolenSFXObject: {fileID: 7183938479833905296, guid: dfafbc9be98c23b44ab762f0c0ebc0d6, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

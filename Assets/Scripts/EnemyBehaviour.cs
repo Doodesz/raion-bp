@@ -23,6 +23,7 @@ public class EnemyBehaviour : MonoBehaviour
     private bool stunned = false;
     private float speed;
     private bool isRunning = false;
+    private float audioSpawnCD = 0.5f;
 
     private Vector3 playerPos;
     private Quaternion stunFacing;
@@ -134,6 +135,9 @@ public class EnemyBehaviour : MonoBehaviour
             animator.SetBool("isDead", true);
             rb.useGravity = true; // For yippees to fall down
         }
+
+        // Optimize instantiated audio hits
+        audioSpawnCD -= Time.deltaTime;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -171,7 +175,7 @@ public class EnemyBehaviour : MonoBehaviour
                 transform.Translate(new Vector3(0, 20f, 0) * Time.deltaTime);
                 hp = 0;
                 dead = true;
-                Instantiate(hitAudioObject, transform.position, Quaternion.identity);
+                SpawnHitAudioObject();
             }
         }
 
@@ -255,5 +259,14 @@ public class EnemyBehaviour : MonoBehaviour
         float randomAngle = Random.Range(0f, 360f);
         Vector3 random = new Vector3(0,randomAngle,0);
         return random;
+    }
+
+    private void SpawnHitAudioObject()
+    {
+        if (audioSpawnCD <= 0)
+        {
+            Instantiate(hitAudioObject, transform.position, Quaternion.identity);
+            audioSpawnCD = 0.5f;
+        }
     }
 }

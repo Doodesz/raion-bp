@@ -155,5 +155,6 @@ public class EventManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
+        Physics.gravity /= 3f;
     }
 }

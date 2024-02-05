@@ -14,7 +14,7 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: Dez
   productName: Drive
-  defaultCursor: {fileID: 2800000, guid: 8fbc75d59ce62e543aacaa433c28b799, type: 3}
+  defaultCursor: {fileID: 2800000, guid: c5cd347772790f441b5b9cf13699bc75, type: 3}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1

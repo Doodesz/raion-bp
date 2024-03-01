@@ -77,7 +77,7 @@ public class EventManager : MonoBehaviour
             }
 
             // Calls dead()
-            if (playerController.isDead)
+            if (playerController.isDead && !gameEnded)
             {
                 Died();
             }

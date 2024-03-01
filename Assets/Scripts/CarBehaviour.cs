@@ -42,6 +42,11 @@ public class CarBehaviour : MonoBehaviour
         float horizontalAxis = Input.GetAxis("Horizontal");
         float verticalAxis = Input.GetAxis("Vertical");
 
+        if (eventManager.gameEnded)
+        {
+            horizontalAxis = 0; verticalAxis = 0;
+        }
+
         enterCar = playerController.enterCar;
 
         // Adds 1 repair tool when bar full
@@ -77,8 +82,8 @@ public class CarBehaviour : MonoBehaviour
             transform.Translate(Vector3.forward * verticalAxis * moveSpeed * Time.smoothDeltaTime, Space.Self);
         }
 
-        // Should've been a bug fix so car is unable to be flipped upside down but not work:/
-/*        Vector3 carRot = transform.eulerAngles;
+        /* Should've been a bug fix so car is unable to be flipped upside down but not work:/
+        Vector3 carRot = transform.eulerAngles;
         if (carRot.z > 40f)
         {
             transform.eulerAngles = new Vector3(carRot.x, carRot.y, 40f);
@@ -104,7 +109,7 @@ public class CarBehaviour : MonoBehaviour
 
         }
 
-        if (collision.gameObject.CompareTag("Exit"))
+        if (collision.gameObject.CompareTag("Exit") && !eventManager.gameEnded)
         {
             eventManager.Escaped();
         }

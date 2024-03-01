@@ -66,6 +66,11 @@ public class PlayerController : MonoBehaviour
             float horizontalAxis = Input.GetAxis("Horizontal");
             float verticalAxis = Input.GetAxis("Vertical");
 
+            if (eventManager.gameEnded)
+            {
+                horizontalAxis = 0; verticalAxis = 0;
+            }
+
             // Player Movements
             if (!enterCar)
             {

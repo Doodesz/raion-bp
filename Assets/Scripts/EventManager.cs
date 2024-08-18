@@ -29,6 +29,7 @@ public class EventManager : MonoBehaviour
     public Interactable currentInteractable = Interactable.Car;
 
     private string currentScene;
+    private bool moveTutorialDone = false, shootTutorialDone = false, runTutorialDone = false;
 
     private AudioSource audioSource;
     private TMP_Text carPromptText;
@@ -81,6 +82,11 @@ public class EventManager : MonoBehaviour
             {
                 Died();
             }
+
+            // Checks tutorials
+            if(IsMoving()) moveTutorialDone = true;
+            if(Input.GetMouseButtonDown(0)) shootTutorialDone = true;
+            if(IsMoving() && Input.GetKey(KeyCode.LeftShift)) runTutorialDone = true;
         }
 
         // Gets volumeSliderBehaviour on pause
@@ -106,7 +112,10 @@ public class EventManager : MonoBehaviour
         
             // Manages instruction text
             string textInput = string.Empty;
-            if (playerController.holdingRepairTool && !carRepaired) textInput = "Repair Car";
+            if (!moveTutorialDone) textInput = "Use WASD keys to move";
+            else if (!runTutorialDone) textInput = "Hold [Left Shift] to run";
+            else if (!shootTutorialDone) textInput = "Press Left click to shoot";
+            else if (playerController.holdingRepairTool && !carRepaired) textInput = "Repair Car";
             else if (repairedParts < 3 && !carRepaired) textInput = "Find Repair Tools (" + repairedParts.ToString() + "/3)";
             else if (carRepaired && !playerController.enterCar) textInput = "Drive";
             else if (playerController.enterCar) textInput = "Find Exit!";
@@ -116,6 +125,14 @@ public class EventManager : MonoBehaviour
 
             repairTextInput.text = textInput;
         }
+    }
+
+    private bool IsMoving()
+    {
+        if (Input.GetAxis("Vertical") > 0 || Input.GetAxis("Horizontal") > 0 ||
+                Input.GetAxis("Vertical") < 0 || Input.GetAxis("Horizontal") < 0)
+            return true;
+        else return false;
     }
 
     // Shows a video of ryan gosling upon winning

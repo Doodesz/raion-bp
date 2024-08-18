@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     public GameObject repairIcon;
     public GameObject shootParticleObject;
 
-    private float moveSpeed = 5f;
+    public float moveSpeed = 5f;
     private float fireRateCD;
     private bool isReceivingDMG = false;
     private float interactCD = 0f;

@@ -17,6 +17,7 @@ public class EnemyBehaviour : MonoBehaviour
     public GameObject yippeeAudioObject;
     public GameObject hitAudioObject;
     public GameObject stolenSFXObject;
+    public GameObject wrenchModelObject;
     public EnemyType thisEnemyType;
 
     private bool spawned = false;
@@ -246,6 +247,7 @@ public class EnemyBehaviour : MonoBehaviour
             {
                 announceTextBehaviour.AnnounceItemStolen("Repair Tool");
                 Instantiate(stolenSFXObject);
+                wrenchModelObject.SetActive(true);
             }
             
             playerController.holdingRepairTool = false;

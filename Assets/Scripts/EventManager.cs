@@ -23,7 +23,8 @@ public class EventManager : MonoBehaviour
     public GameObject car;
     public GameObject carRepairPrompt;
     public GameObject videoPlayer;
-    public GameObject videoRenderer;
+    public GameObject videoRendererWin;
+    public GameObject videoRendererLose;
     public GameObject pauseScreen;
 
     public Interactable currentInteractable = Interactable.Car;
@@ -49,7 +50,8 @@ public class EventManager : MonoBehaviour
         videoPlayerBehaviour = videoPlayer.GetComponent<VideoPlayerBehaviour>();
         audioSource = GetComponent<AudioSource>();
         currentScene = SceneManager.GetActiveScene().name;
-        videoRenderer.GetComponent<RawImage>().enabled = false;
+        videoRendererWin.GetComponent<RawImage>().enabled = false;
+        videoRendererLose.GetComponent<RawImage>().enabled = false;
         Physics.gravity *= 3f; // For GameObjects to be heavier and harder for car to flip (possible anyways)
     }
 
@@ -139,7 +141,8 @@ public class EventManager : MonoBehaviour
     public void Escaped()
     {
         videoPlayerBehaviour.PlayWinClip();
-        videoRenderer.GetComponent<RawImage>().enabled = true;
+        videoRendererWin.SetActive(true);
+        videoRendererWin.GetComponent<RawImage>().enabled = true;
         audioSource.Pause();
         gameWon = true;
         gameEnded = true;
@@ -149,7 +152,8 @@ public class EventManager : MonoBehaviour
     private void Died()
     {
         videoPlayerBehaviour.PlayDeadClip();
-        videoRenderer.GetComponent<RawImage>().enabled = true;
+        videoRendererLose.SetActive(true);
+        videoRendererLose.GetComponent<RawImage>().enabled = true;
         audioSource.Pause();
         playerDied = true;
         gameEnded = true;
